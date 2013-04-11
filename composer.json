@@ -1,15 +1,14 @@
 {
 	"name":"menatwork/diffiehellman",
 	"description":"A Contao implementation of Diffie-Hellman Key Exchange cryptographic protocol for PHP5",
-	"keywords":["security", "encryption", "aes"],
+	"keywords":["security", "encryption", "key", "exchange"],
 	"type":"contao-library",
-	"license":"MIT",
+	"license":"BSD-2-Clause",
 	"authors":[
 		{
-			"name":"Andreas Isaak",
-			"email":"isaak@men-at-work.de",
-			"homepage":"http://www.men-at-work.de",
-			"role":"Project leader"
+			"name":"Bill Shupp",
+			"email":"hostmaster@shupp.org",
+			"role":"Original developer"
 		},
 		{
 			"name":"Stefan Heimes",
@@ -17,11 +16,6 @@
 			"homepage":"http://www.men-at-work.de",
 			"role":"Developer"
 		},
-		{
-			"name": "Bill Shupp",
-			"email": "hostmaster@shupp.org",
-			"role": "Original developer"
-		}
 	],
 	"require":{
 		"php:":">=5.2.0"
