@@ -9,7 +9,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2005-2007 Pádraic Brady <padraic.brady@yahoo.com>
  * All rights reserved.
  *
@@ -20,9 +20,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The name of the author may not be used to endorse or promote products 
+ *    * The name of the author may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -45,8 +45,7 @@
  * @link        http://
  */
 
-/** Crypt_DiffieHellman_Math */
-require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math.php';
+namespace MenAtWork\DiffieHellman;
 
 /**
  * Crypt_DiffieHellman class
@@ -76,16 +75,16 @@ require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math.php';
  *             generator = 5
  *             private key = 9
  *      Bob:   prime = 563
- *             generator = 5 
+ *             generator = 5
  *             private key = 14
- *      
+ *
  *      $alice = new Crypt_DiffieHellman(563, 5, 9);
  *      $alice_pubKey = alice->generateKeys()->getPublicKey();
  *      $bob = new Crypt_DiffieHellman(563, 5, 14);
  *      $bob_pubKey = $bob->generateKeys()->getPublicKey();
  *
  *      // the public keys are then exchanged (with agreed prime and generator)
- *      
+ *
  *      $alice_computeKey = $alice->computeSecretKey($bob_pubKey)->getSharedSecretKey();
  *      $bob_computeKey = $bob->computeSecretKey($alice_pubKey)->getSharedSecretKey();
  *
@@ -107,8 +106,8 @@ require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math.php';
  *      to always use a sufficiently large prime, preferably one of the primes
  *      deemed to have positive cryptographic qualities. The generator is
  *      always a number less than the prime number.
- *      
- * 
+ *
+ *
  * @category   Encryption
  * @package    Crypt_DiffieHellman
  * @author     Pádraic Brady <padraic.brady@yahoo.com>
@@ -118,11 +117,11 @@ require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math.php';
  * @version    @package_version@
  * @access     public
  */
-class Crypt_DiffieHellman
+class DiffieHellman
 {
 
     /**
-     * Default large prime number; required by the algorithm. 
+     * Default large prime number; required by the algorithm.
      *
      * @var string
      */
@@ -149,7 +148,7 @@ class Crypt_DiffieHellman
      * use /dev/urandom or a less cryptographically secure algorithm if a
      * system based RNG cannot be found.
      *
-     * @var Crypt_DiffieHellman_Math
+     * @var Math
      */
     private $_math = null;
 

@@ -1,8 +1,8 @@
 {
 	"name":"menatwork/diffiehellman",
-	"description":"A Contao implementation of Diffie-Hellman Key Exchange cryptographic protocol for PHP5",
+	"description":"A implementation of Diffie-Hellman Key Exchange cryptographic protocol for PHP5/7",
 	"keywords":["security","encryption","key","exchange"],
-	"type":"contao-module",
+	"type":"Encryption",
 	"license":"BSD-2-Clause",
 	"authors":[
 		{
@@ -12,24 +12,17 @@
 		},
 		{
 			"name":"Stefan Heimes",
-			"email":"contao@men-at-work.de",
+			"email":"heimes@men-at-work.de",
 			"homepage":"http://www.men-at-work.de",
 			"role":"Developer"
 		}
 	],
 	"require":{
-		"php":">=5.2.0",
-		"contao/core":">=2.11,<4",
-		"contao-community-alliance/composer-installer":"*"
+		"php": "^5.6 || ^7.0"
 	},
 	"autoload":{
-		"classmap":["system/"]
-	},
-	"extra":{
-		"contao":{
-			"sources":{
-				"system/modules/DiffieHellman":"system/modules/DiffieHellman"
-			}
+		"psr-4": {
+			"MenAtWork\\DiffieHellman\\": "src"
 		}
 	}
 }
