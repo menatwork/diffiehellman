@@ -24,5 +24,10 @@
 		"psr-4": {
 			"MenAtWork\\DiffieHellman\\": "src"
 		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-feature/php7": "0.4.x-dev"
+		}
 	}
 }
