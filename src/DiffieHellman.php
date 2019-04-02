@@ -405,7 +405,7 @@ class DiffieHellman
      */
     public function setBigIntegerMath($extension = null)
     {
-        $this->_math = new Crypt_DiffieHellman_Math($extension);
+        $this->_math = new Math($extension);
     }
 
     /**
