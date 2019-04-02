@@ -220,9 +220,8 @@ class DiffieHellman
      */
     public function getPublicKey($type = self::NUMBER)
     {
-        if (is_null($this->_publicKey)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('A public key has not yet been generated using a prior call to generateKeys()');
+        if (is_null($this->_publicKey)) {            
+            throw new Exception('A public key has not yet been generated using a prior call to generateKeys()');
         }
         if ($type == self::BINARY) {
             return $this->_math->toBinary($this->_publicKey);
@@ -249,9 +248,8 @@ class DiffieHellman
         if ($type == self::BINARY) {
             $publicKey = $this->_math->fromBinary($publicKey);
         }
-        if (!preg_match("/^\d+$/", $publicKey)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('invalid parameter; not a positive natural number');
+        if (!preg_match("/^\d+$/", $publicKey)) {            
+            throw new Exception('invalid parameter; not a positive natural number');
         }
         $this->_secretKey = $this->_math->powmod($publicKey, $this->getPrivateKey(), $this->getPrime());
         return $this;
@@ -265,9 +263,8 @@ class DiffieHellman
      */
     public function getSharedSecretKey($type = self::NUMBER)
     {
-        if (!isset($this->_secretKey)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('A secret key has not yet been computed; call computeSecretKey()');
+        if (!isset($this->_secretKey)) {            
+            throw new Exception('A secret key has not yet been computed; call computeSecretKey()');
         }
         if ($type == self::BINARY) {
             return $this->_math->toBinary($this->_secretKey);
@@ -301,9 +298,8 @@ class DiffieHellman
      */
     public function getPrime($type = self::NUMBER)
     {
-        if (!isset($this->_prime)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('No prime number has been set');
+        if (!isset($this->_prime)) {            
+            throw new Exception('No prime number has been set');
         }
 
         if ($type == self::NUMBER) {
@@ -323,9 +319,8 @@ class DiffieHellman
      */
     public function setGenerator($number)
     {
-        if (!preg_match("/^\d+$/", $number) || $number < 2) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('invalid parameter; not a positive natural number greater than 1');
+        if (!preg_match("/^\d+$/", $number) || $number < 2) {            
+            throw new Exception('invalid parameter; not a positive natural number greater than 1');
         }
         $this->_generator = (string) $number;
         return $this;
@@ -339,9 +334,8 @@ class DiffieHellman
      */
     public function getGenerator($type = self::NUMBER)
     {
-        if (!isset($this->_generator)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('No generator number has been set');
+        if (!isset($this->_generator)) {            
+            throw new Exception('No generator number has been set');
         }
         if ($type == self::NUMBER) {
             return $this->_generator;
@@ -364,8 +358,7 @@ class DiffieHellman
             $number = $this->_math->fromBinary($number);
         }
         if (!preg_match("/^\d+$/", $number)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('invalid parameter; not a positive natural number');
+            throw new Exception('invalid parameter; not a positive natural number');
         }
         $this->_privateKey = (string) $number;
         return $this;
