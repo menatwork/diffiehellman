@@ -24,6 +24,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+namespace MenAtWork\DiffieHellman\Math\BigInteger;
+
 /**
  * Support for arbitrary precision mathematics in PHP.
  *
@@ -35,18 +37,26 @@
  * @author     Pádraic Brady (http://blog.astrumfutura.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Crypt_DiffieHellman_Math_BigInteger_Interface
+interface IBase
 {
 
     public function init($operand, $base = 10);
-    public function add($left_operand, $right_operand);
-    public function subtract($left_operand, $right_operand);
-    public function compare($left_operand, $right_operand);
-    public function divide($left_operand, $right_operand);
-    public function modulus($left_operand, $modulus);
-    public function multiply($left_operand, $right_operand);
-    public function pow($left_operand, $right_operand);
-    public function powmod($left_operand, $right_operand, $modulus);
-    public function sqrt($operand);
 
+    public function add($left_operand, $right_operand);
+
+    public function subtract($left_operand, $right_operand);
+
+    public function compare($left_operand, $right_operand);
+
+    public function divide($left_operand, $right_operand);
+
+    public function modulus($left_operand, $modulus);
+
+    public function multiply($left_operand, $right_operand);
+
+    public function pow($left_operand, $right_operand);
+
+    public function powmod($left_operand, $right_operand, $modulus);
+
+    public function sqrt($operand);
 }

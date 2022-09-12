@@ -6,7 +6,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2005-2007, Pádraic Brady <padraic.brady@yahoo.com>
  * All rights reserved.
  *
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The name of the author may not be used to endorse or promote products 
+ *    * The name of the author may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -42,12 +42,14 @@
  * @link        http://
  */
 
-/** Crypt_DiffieHellman_Math_BigInteger_Interface */
-require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math/BigInteger/Interface.php';
+namespace MenAtWork\DiffieHellman\Math;
+
+use MenAtWork\DiffieHellman\Math\BigInteger\Exception as BigIntergerException;
+use MenAtWork\DiffieHellman\Math\BigInteger\IBase;
 
 /**
  * Crypt_DiffieHellman_Math_BigInteger class
- * 
+ *
  * @category   Encryption
  * @package    Crypt_DiffieHellman
  * @author     Pádraic Brady <padraic.brady@yahoo.com>
@@ -57,13 +59,13 @@ require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math/BigInte
  * @version    @package_version@
  * @access     public
  */
-class Crypt_DiffieHellman_Math_BigInteger
+class BigInteger
 {
 
     /**
      * Holds an instance of one of the three arbitrary precision wrappers.
      *
-     * @var Crypt_DiffieHellman_Math_BigInteger_Interface
+     * @var IBase
      */
     protected $_math = null;
 
@@ -73,8 +75,10 @@ class Crypt_DiffieHellman_Math_BigInteger
      * object.
      *
      * @todo add big_int support
-     * @throws  Crypt_DiffieHellman_Math_BigInteger_Exception
-     * @return void
+     *
+     * @param null $extension
+     *
+     * @throws BigIntergerException
      */
     public function __construct($extension = null)
     {
@@ -84,7 +88,7 @@ class Crypt_DiffieHellman_Math_BigInteger
             } else if (extension_loaded('bcmath')) {
                 $extension = 'bcmath';
             } else {
-                throw new Crypt_DiffieHellman_Math_BigInteger_Exception(
+                throw new BigIntergerException(
                     'gmp or bcmath extensions required'
                 );
             }
@@ -93,40 +97,45 @@ class Crypt_DiffieHellman_Math_BigInteger
         $this->_math = $this->factory($extension);
     }
 
-    /*
+    /**
      * Factory for instantiating the big integer driver
+     *
+     * @param $driver
+     *
+     * @return mixed
+     * @throws BigIntergerException
      */
     protected function factory($driver)
     {
         $extensions = array(
-            'gmp' => 'Gmp',
-            'bcmath' => 'Bcmath'
+            'gmp'    => '\MenAtWork\DiffieHellman\Math\BigInteger\Gmp',
+            'bcmath' => '\MenAtWork\DiffieHellman\Math\BigInteger\Bcmath'
         );
 
         if (!isset($extensions[$driver])) {
-            throw new Crypt_DiffieHellman_Math_BigInteger_Exception('Invalid big integer precision math extension');
+            throw new BigIntergerException('Invalid big integer precision math extension');
         }
 
-        $class = 'Crypt_DiffieHellman_Math_BigInteger_' . $extensions[$driver];
-        $file =  str_replace('_', DIRECTORY_SEPARATOR, 'DiffieHellman_Math_BigInteger_' . $extensions[$driver]) . '.php';
-        
-        include_once TL_ROOT . '/system/modules/DiffieHellman/' . $file;
-        return new $class;
+        $class = $extensions[$driver];
+
+        return new $class();
     }
 
     /**
      * Redirect all public method calls to the wrapped extension object.
      *
      * @param   string $methodName
-     * @param   array $args
-     * @throws  Zend_Math_BigInteger_Exception
+     * @param   array  $args
+     *
+     * @return mixed
+     * @throws  BigIntergerException
      */
     public function __call($methodName, $args)
     {
         if (!method_exists($this->_math, $methodName)) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math/BigInteger/Exception.php';
-            throw new Crypt_DiffieHellman_Math_BigInteger_Exception('invalid method call: ' . get_class($this->_math) . '::' . $methodName . '() does not exist');
+            throw new BigIntergerException('invalid method call: ' . get_class($this->_math) . '::' . $methodName . '() does not exist');
         }
+
         return call_user_func_array(array($this->_math, $methodName), $args);
     }
 

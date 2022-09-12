@@ -6,7 +6,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2005-2007, Pádraic Brady <padraic.brady@yahoo.com>
  * All rights reserved.
  *
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The name of the author may not be used to endorse or promote products 
+ *    * The name of the author may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -42,8 +42,10 @@
  * @link        http://
  */
 
-/** Crypt_DiffieHellman_Math_BigInteger */
-require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math/BigInteger.php';
+namespace MenAtWork\DiffieHellman;
+
+use MenAtWork\DiffieHellman\Math\BigInteger;
+use MenAtWork\DiffieHellman\Math\BigInteger\Gmp as BigIntGmp;
 
 /**
  * Crypt_DiffieHellman_Math class
@@ -55,7 +57,7 @@ require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math/BigInte
  *
  *      $math = new Crypt_DiffieHellman_Math('gmp');
  *      $randomNumber = $math->rand(2, '384834813984910010746469093412498181642341794');
- * 
+ *
  * @category   Encryption
  * @package    Crypt_DiffieHellman
  * @author     Pádraic Brady <padraic.brady@yahoo.com>
@@ -65,17 +67,21 @@ require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Math/BigInte
  * @version    @package_version@
  * @access     public
  */
-class Crypt_DiffieHellman_Math extends Crypt_DiffieHellman_Math_BigInteger
+class Math extends BigInteger
 {
 
     /**
      * Generate a pseudorandom number within the given range.
      * Will attempt to read from a systems RNG if it exists.
      *
-     * @param string|int $min
-     * @param string|int $max
+     * @param $minimum
+     * @param $maximum
+     *
      * @return string
-     * @todo Even more pseudorandomness would be nice...
+     * @internal param int|string $min
+     * @internal param int|string $max
+     *
+     * @todo     Even more pseudorandomness would be nice...
      */
     public function rand($minimum, $maximum)
     {
@@ -89,11 +95,12 @@ class Crypt_DiffieHellman_Math extends Crypt_DiffieHellman_Math_BigInteger
             return mt_rand($minimum, $maximum - 1);
         }
         $rand = '';
-        $i2 = strlen($maximum) - 1;
-        for ($i = 1;$i < $i2;$i++) {
-            $rand .= mt_rand(0,9);
+        $i2   = strlen($maximum) - 1;
+        for ($i = 1; $i < $i2; $i++) {
+            $rand .= mt_rand(0, 9);
         }
-        $rand .= mt_rand(0,9);
+        $rand .= mt_rand(0, 9);
+
         return $rand;
     }
 
@@ -102,12 +109,15 @@ class Crypt_DiffieHellman_Math extends Crypt_DiffieHellman_Math_BigInteger
      * binary form which returns the big-endian two's complement.
      *
      * @param string $long
+     *
      * @return string
      */
-    public function btwoc($long) {
+    public function btwoc($long)
+    {
         if (ord($long[0]) > 127) {
             return "\x00" . $long;
         }
+
         return $long;
     }
 
@@ -115,16 +125,19 @@ class Crypt_DiffieHellman_Math extends Crypt_DiffieHellman_Math_BigInteger
      * Convert a Binary value into a BigInteger number
      *
      * @param string $binary
+     *
      * @return string
      */
-    public function fromBinary($binary) {
-        if (!$this instanceof Crypt_DiffieHellman_Math_BigInteger_Gmp) {
-            $big = 0;
+    public function fromBinary($binary)
+    {
+        if (!$this instanceof BigIntGmp) {
+            $big    = 0;
             $length = mb_strlen($binary, '8bit');
             for ($i = 0; $i < $length; $i++) {
                 $big = $this->_math->multiply($big, 256);
                 $big = $this->_math->add($big, ord($binary[$i]));
             }
+
             return $big;
         } else {
             return $this->_math->init(bin2hex($binary), 16); // gmp shortcut
@@ -135,11 +148,12 @@ class Crypt_DiffieHellman_Math extends Crypt_DiffieHellman_Math_BigInteger
      * Convert a BigInteger number into binary
      *
      * @param string $big
+     *
      * @return string
      */
     public function toBinary($big)
     {
-        if (!$this instanceof Crypt_DiffieHellman_Math_BigInteger_Gmp) {
+        if (!$this instanceof BigIntGmp) {
             $compare = $this->_math->compare($big, 0);
             if ($compare == 0) {
                 return (chr(0));
@@ -149,8 +163,9 @@ class Crypt_DiffieHellman_Math extends Crypt_DiffieHellman_Math_BigInteger
             $binary = null;
             while ($this->_math->compare($big, 0) > 0) {
                 $binary = chr($this->_math->modulus($big, 256)) . $binary;
-                $big = $this->_math->divide($big, 256);
+                $big    = $this->_math->divide($big, 256);
             }
+
             return $binary;
         } else {
             return pack("H*", gmp_strval($big, 16));
