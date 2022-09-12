@@ -2,7 +2,7 @@
 	"name":"menatwork/diffiehellman",
 	"description":"A implementation of Diffie-Hellman Key Exchange cryptographic protocol for PHP5/7",
 	"keywords":["security","encryption","key","exchange"],
-	"type":"Encryption",
+	"type":"encryption",
 	"license":"BSD-2-Clause",
 	"authors":[
 		{
