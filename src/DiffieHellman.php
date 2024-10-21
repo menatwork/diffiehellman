@@ -283,8 +283,7 @@ class DiffieHellman
     public function setPrime($number)
     {
         if (!preg_match("/^\d+$/", $number) || $number < 11) {
-            require_once TL_ROOT . '/system/modules/DiffieHellman/DiffieHellman/Exception.php';
-            throw new Crypt_DiffieHellman_Exception('invalid parameter; not a positive natural number or too small: should be a large natural number prime');
+            throw new \MenAtWork\DiffieHellman\Exception('invalid parameter; not a positive natural number or too small: should be a large natural number prime');
         }
         $this->_prime = (string) $number;
         return $this;
