@@ -11,8 +11,7 @@ About
 System requirements
 -------------------
 
-* PHP 5.2.0
-* PEAR Installer 1.4.0b1
+* PHP 8
 * bcmath
 * mbstring
 * gmp (Optional)

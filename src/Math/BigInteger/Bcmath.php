@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Math extension wrapper for DiffieHellman with some additional helper
  * methods for RNG and binary conversion.
