@@ -108,7 +108,7 @@ class Gmp implements IBase
      */
     public function compare($left_operand, $right_operand)
     {
-        return gmp_strval(gmp_cmp($left_operand, $right_operand));
+        return gmp_cmp($left_operand, $right_operand);
     }
 
     /**

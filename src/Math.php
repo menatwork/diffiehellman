@@ -3,7 +3,7 @@
  * Math extension wrapper for DiffieHellman with some additional helper
  * methods for RNG and binary conversion.
  *
- * PHP version 5
+ * PHP version 8
  *
  * LICENSE:
  *
@@ -71,37 +71,18 @@ class Math extends BigInteger
 {
 
     /**
-     * Generate a pseudorandom number within the given range.
-     * Will attempt to read from a systems RNG if it exists.
+     * Generate a cryptographically secure random byte string of the same
+     * length as the decimal representation of $maximum.
+     * The result is intended to be passed to fromBinary() / setPrivateKey(..., BINARY).
      *
-     * @param $minimum
-     * @param $maximum
+     * @param string|int $minimum  Unused; kept for interface compatibility.
+     * @param string|int $maximum  Upper bound; determines the byte length.
      *
-     * @return string
-     * @internal param int|string $min
-     * @internal param int|string $max
-     *
-     * @todo     Even more pseudorandomness would be nice...
+     * @return string  Raw random bytes.
      */
     public function rand($minimum, $maximum)
     {
-        if (file_exists('/dev/urandom')) {
-            $frandom = fopen('/dev/urandom', 'r');
-            if ($frandom !== false) {
-                return fread($frandom, strlen($maximum) - 1);
-            }
-        }
-        if (strlen($maximum) < 4) {
-            return mt_rand($minimum, $maximum - 1);
-        }
-        $rand = '';
-        $i2   = strlen($maximum) - 1;
-        for ($i = 1; $i < $i2; $i++) {
-            $rand .= mt_rand(0, 9);
-        }
-        $rand .= mt_rand(0, 9);
-
-        return $rand;
+        return random_bytes(strlen((string) $maximum));
     }
 
     /**
@@ -130,7 +111,7 @@ class Math extends BigInteger
      */
     public function fromBinary($binary)
     {
-        if (!$this instanceof BigIntGmp) {
+        if (!$this->_math instanceof BigIntGmp) {
             $big    = 0;
             $length = mb_strlen($binary, '8bit');
             for ($i = 0; $i < $length; $i++) {
@@ -153,11 +134,11 @@ class Math extends BigInteger
      */
     public function toBinary($big)
     {
-        if (!$this instanceof BigIntGmp) {
+        if (!$this->_math instanceof BigIntGmp) {
             $compare = $this->_math->compare($big, 0);
             if ($compare == 0) {
                 return (chr(0));
-            } else if ($compare < 0) {
+            } elseif ($compare < 0) {
                 return false;
             }
             $binary = null;

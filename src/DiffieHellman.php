@@ -6,7 +6,7 @@
  * establish a secure shared secret key across an insecure channel
  * of communication.
  *
- * PHP version 5
+ * PHP version 8
  *
  * LICENSE:
  *
@@ -190,8 +190,8 @@ class DiffieHellman
     {
         $this->setPrime($prime);
         $this->setGenerator($generator);
-        if (!is_null($privateKey)) {
-            if (is_null($privateKeyType)) {
+        if ($privateKey !== null) {
+            if ($privateKeyType === null) {
                 $privateKeyType = self::NUMBER;
             }
             $this->setPrivateKey($privateKey, $privateKeyType);
@@ -220,7 +220,7 @@ class DiffieHellman
      */
     public function getPublicKey($type = self::NUMBER)
     {
-        if (is_null($this->_publicKey)) {            
+        if ($this->_publicKey === null) {
             throw new Exception('A public key has not yet been generated using a prior call to generateKeys()');
         }
         if ($type == self::BINARY) {
@@ -248,7 +248,7 @@ class DiffieHellman
         if ($type == self::BINARY) {
             $publicKey = $this->_math->fromBinary($publicKey);
         }
-        if (!preg_match("/^\d+$/", $publicKey)) {            
+        if (!preg_match("/^\d+$/", (string) $publicKey)) {
             throw new Exception('invalid parameter; not a positive natural number');
         }
         $this->_secretKey = $this->_math->powmod($publicKey, $this->getPrivateKey(), $this->getPrime());
@@ -263,7 +263,7 @@ class DiffieHellman
      */
     public function getSharedSecretKey($type = self::NUMBER)
     {
-        if (!isset($this->_secretKey)) {            
+        if ($this->_secretKey === null) {
             throw new Exception('A secret key has not yet been computed; call computeSecretKey()');
         }
         if ($type == self::BINARY) {
@@ -282,7 +282,7 @@ class DiffieHellman
      */
     public function setPrime($number)
     {
-        if (!preg_match("/^\d+$/", $number) || $number < 11) {
+        if (!preg_match("/^\d+$/", (string) $number) || $number < 11) {
             throw new \MenAtWork\DiffieHellman\Exception('invalid parameter; not a positive natural number or too small: should be a large natural number prime');
         }
         $this->_prime = (string) $number;
@@ -297,13 +297,13 @@ class DiffieHellman
      */
     public function getPrime($type = self::NUMBER)
     {
-        if (!isset($this->_prime)) {            
+        if ($this->_prime === null) {
             throw new Exception('No prime number has been set');
         }
 
         if ($type == self::NUMBER) {
             return $this->_prime;
-        } else if ($type == self::BTWOC) {
+        } elseif ($type == self::BTWOC) {
             return $this->_math->btwoc($this->_math->toBinary($this->_prime));
         }
 
@@ -318,7 +318,7 @@ class DiffieHellman
      */
     public function setGenerator($number)
     {
-        if (!preg_match("/^\d+$/", $number) || $number < 2) {            
+        if (!preg_match("/^\d+$/", (string) $number) || $number < 2) {
             throw new Exception('invalid parameter; not a positive natural number greater than 1');
         }
         $this->_generator = (string) $number;
@@ -333,12 +333,12 @@ class DiffieHellman
      */
     public function getGenerator($type = self::NUMBER)
     {
-        if (!isset($this->_generator)) {            
+        if ($this->_generator === null) {
             throw new Exception('No generator number has been set');
         }
         if ($type == self::NUMBER) {
             return $this->_generator;
-        } else if ($type == self::BTWOC) {
+        } elseif ($type == self::BTWOC) {
             return $this->_math->btwoc($this->_math->toBinary($this->_generator));
         }
         return $this->_math->toBinary($this->_generator);
@@ -356,7 +356,7 @@ class DiffieHellman
         if ($type == self::BINARY) {
             $number = $this->_math->fromBinary($number);
         }
-        if (!preg_match("/^\d+$/", $number)) {
+        if (!preg_match("/^\d+$/", (string) $number)) {
             throw new Exception('invalid parameter; not a positive natural number');
         }
         $this->_privateKey = (string) $number;
@@ -371,7 +371,7 @@ class DiffieHellman
      */
     public function getPrivateKey($type = self::NUMBER)
     {
-        if (!isset($this->_privateKey)) {
+        if ($this->_privateKey === null) {
             $this->setPrivateKey($this->_generatePrivateKey(), self::BINARY);
         }
         if ($type == self::BINARY) {

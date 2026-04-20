@@ -3,7 +3,7 @@
  * Math extension wrapper for DiffieHellman with some additional helper
  * methods for RNG and binary conversion.
  *
- * PHP version 5
+ * PHP version 8
  *
  * LICENSE:
  *
@@ -85,7 +85,7 @@ class BigInteger
         if ($extension === null) {
             if (extension_loaded('gmp')) {
                 $extension = 'gmp';
-            } else if (extension_loaded('bcmath')) {
+            } elseif (extension_loaded('bcmath')) {
                 $extension = 'bcmath';
             } else {
                 throw new BigIntergerException(
@@ -136,7 +136,7 @@ class BigInteger
             throw new BigIntergerException('invalid method call: ' . get_class($this->_math) . '::' . $methodName . '() does not exist');
         }
 
-        return call_user_func_array(array($this->_math, $methodName), $args);
+        return $this->_math->$methodName(...$args);
     }
 
 }
